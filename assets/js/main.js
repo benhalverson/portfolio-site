@@ -5,21 +5,21 @@
 
 		// init scrollspy
 		$('body').scrollspy({ target: '#main-nav' });
-		
-		// init scroll-to effect navigation, adjust the scroll speed in milliseconds			
+
+		// init scroll-to effect navigation, adjust the scroll speed in milliseconds
 		$('#main-nav').localScroll(1000);
 		$('#header').localScroll(1000);
 
 
-		// google maps 
+		// google maps
 		if( $('.map-canvas').length > 0) {
-			
+
 			var geocoder = new google.maps.Geocoder();
-			var address = 'Google New York, 76 Ninth Ave, New York, NY, USA';
+			var address = '46684 Windmill Dr Fremont, CA 94539';
 			var contentString = '<div class="map-detail"><strong>Our Office:</strong><p>' + address + '</p></div>';
-			
+
 			geocoder.geocode({'address': address }, function(results, status) {
-				if(status == google.maps.GeocoderStatus.OK) { 
+				if(status == google.maps.GeocoderStatus.OK) {
 					var latitude = results[0].geometry.location.lat();
 					var longitude = results[0].geometry.location.lng();
 
@@ -31,33 +31,33 @@
 					});
 				}else { alert('Google Maps had some trouble finding the address. Status: ' + status); }
 			});
-			
+
 		}
 
-		// form validation 
+		// form validation
 		Modernizr.load({
-			test: Modernizr.input.autocomplete,		
+			test: Modernizr.input.autocomplete,
 			nope: ['assets/js/jquery.validate.js', 'assets/js/jquery.validate.bootstrap.js'],
 		});
 
 		// ajax contact form
 		$('.contact-form form').submit( function(e) {
-			
+
 			e.preventDefault();
 
 			$theForm = $(this);
 			$btn = $(this).find('#submit-button');
-			$alert = $(this).parent().find('.alert');			
+			$alert = $(this).parent().find('.alert');
 
 			// just to check if validation supported without response, such as safari 5.1. Removing JS error on chrome
 			if( !Modernizr.input.autocomplete ) {
-				
+
 				$theForm.validate({
 
 					messages: {
 						email: { required: "Email is required", email: "Please enter a valid email address"}
 					}
-				});	
+				});
 
 				if( !$theForm.valid() ) {
 					return;
@@ -68,16 +68,16 @@
 			$btn.attr('disabled', 'disabled');
 
 			$.post('contact.php', $(this).serialize(), function(data){
-				
+
 				$message = data.message;
-				
+
 				if( data.result == true ){
 					$theForm.slideUp('medium', function() {
 						$alert.removeClass('alert-danger');
-						$alert.addClass('alert-success').html($message).slideDown('medium');	
-					});				
+						$alert.addClass('alert-success').html($message).slideDown('medium');
+					});
 				}else {
-					$alert.addClass('alert-danger').html($message).slideDown('medium');	
+					$alert.addClass('alert-danger').html($message).slideDown('medium');
 				}
 
 				$btn.removeClass('loading');
